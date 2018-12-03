@@ -1,0 +1,19 @@
+{
+  "name": "bad-scroll",
+  "version": "0.0.0",
+  "description": "tiny scroll",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/132yse/bad-scroll.git"
+  },
+  "author": "132yse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/132yse/bad-scroll/issues"
+  },
+  "homepage": "https://github.com/132yse/bad-scroll#readme"
+}
