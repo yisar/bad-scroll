@@ -8,6 +8,7 @@ function BScroll(ctx) {
   var isDown = false
   var isTransform = false
   var cur = 0
+  var target = 0
 
 
   ctx.addEventListener('touchstart', function (e) {
@@ -29,7 +30,6 @@ function BScroll(ctx) {
       if (e.timeStamp - this._startTime > 50) {
         this._startTime = e.timeStamp
         cur = e.changedTouches[0].clientY - this._oy
-        console.log(e.changedTouches[0].clientY, this._oy)
         if (cur > 0) {
           cur *= F / (F + cur)
         } else if (cur < this._ch - this._oh) {
@@ -58,14 +58,13 @@ function BScroll(ctx) {
 
         var requestId = window.requestAnimationFrame(bounce)
         if (-cur - oh > OFFSET) {
-          ctx.target = -oh
+          target = -oh
           window.cancelAnimationFrame(requestId)
           ease()
           return
         }
 
         if (cur > OFFSET) {
-          ctx.target = 0
           window.cancelAnimationFrame(requestId)
           ease()
           return
@@ -74,13 +73,12 @@ function BScroll(ctx) {
         if (Math.abs(vy) < 1) {
 
           if (cur > 0) {
-            ctx.target = -oh
             window.cancelAnimationFrame(requestId)
             ease()
             return
           }
           if (-cur > oh) {
-            ctx.target = -oh
+            target = -oh
             window.cancelAnimationFrame(requestId)
             ease()
           }
@@ -92,12 +90,11 @@ function BScroll(ctx) {
 
   function ease() {
     isTransform = true
-
-    cur -= (cur - ctx.target) * 0.2
+    cur -= (cur - target) * 0.2
 
     var requestId = window.requestAnimationFrame(ease)
-    if (Math.abs(cur - ctx.target) < 1) {
-      cur = ctx.target
+    if (Math.abs(cur - target) < 1) {
+      cur = target
       window.cancelAnimationFrame(requestId)
       isTransform = false
     }
@@ -110,3 +107,5 @@ function BScroll(ctx) {
   }
 }
 
+
+module.exports = BScroll
