@@ -34,9 +34,7 @@ function BScroll(ctx) {
           cur *= F / (F + cur)
         } else if (cur < this._ch - this._oh) {
           cur += this._oh - this._ch
-
           cur = (cur * F) / (F - cur) - this._oh + this._ch
-
         }
 
         transform(cur)
@@ -47,65 +45,68 @@ function BScroll(ctx) {
 
   }, false)
 
-  ctx.addEventListener('touchend', function (e) {
+  ctx.addEventListener('touchend', function () {
     if (isDown) {
       isDown = false
-
-      var that = this
-      var FRIC = ((vy >> 31) * 2 + 1) * 0.5
+      var f = ((vy >> 31) * 2 + 1) * 0.5
       var oh = this.scrollHeight - this.clientHeight
-      this._timer = setInterval(function () {
-        vy -= FRIC
+      var bounce = function () {
+        vy -= f
         cur += vy
+
         transform(cur)
 
+        var requestId = window.requestAnimationFrame(bounce)
         if (-cur - oh > OFFSET) {
-          clearTimeout(that._timer)
-          ease(-oh)
+          ctx.target = -oh
+          window.cancelAnimationFrame(requestId)
+          ease()
           return
         }
 
         if (cur > OFFSET) {
-          clearTimeout(that._timer)
-          ease(0)
+          ctx.target = 0
+          window.cancelAnimationFrame(requestId)
+          ease()
           return
         }
 
         if (Math.abs(vy) < 1) {
-          clearTimeout(that._timer)
+
           if (cur > 0) {
-            ease(0)
+            ctx.target = -oh
+            window.cancelAnimationFrame(requestId)
+            ease()
             return
           }
           if (-cur > oh) {
-            ease(-oh)
-            return
+            ctx.target = -oh
+            window.cancelAnimationFrame(requestId)
+            ease()
           }
         }
-      }, 20)
-
+      }
+      bounce()
     }
   })
 
-  function ease(target) {
+  function ease() {
     isTransform = true
-    ctx._timer = setInterval(function () {
-      cur -= (cur - target) * 0.2
-      if (Math.abs(cur - target) < 1) {
-        cur = target
-        clearInterval(ctx._timer)
-        isTransform = false
-      }
 
-      transform(cur)
-    }, 20)
+    cur -= (cur - ctx.target) * 0.2
+
+    var requestId = window.requestAnimationFrame(ease)
+    if (Math.abs(cur - ctx.target) < 1) {
+      cur = ctx.target
+      window.cancelAnimationFrame(requestId)
+      isTransform = false
+    }
+
+    transform(cur)
   }
 
   function transform(y) {
     el.style.transform = 'translate3d(0,' + y + 'px,0)'
   }
-
 }
 
-
-module.exports = BScroll
