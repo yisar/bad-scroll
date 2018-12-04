@@ -23,4 +23,4 @@ const BScroll = new BScroll(document.querySelector('.wrapper'))
 ```
 #### sketch
 
-<img src="https://ws1.sinaimg.cn/large/0065Zy9egy1fxv217rjmij30n20hkjrx.jpg" alt="logo" width="500px"/>
+<img src="https://ws1.sinaimg.cn/large/0065Zy9egy1fxv2ag9v5jj30n20hk0v0.jpg" alt="logo" width="500px"/>
