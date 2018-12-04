@@ -16,20 +16,22 @@
 
   .wrapper {
     width: 80%;
-    margin: 0 auto;
-    text-align: center;
+    margin: 20px auto;
   }
 </style>
 
 <div class="wrapper">
+  <ul class="list">
+
+  </ul>
 </div>
 
 <script src="./index.js"></script>
 <script>
-  for (var i = 0; i < 1000; i++) {
-    var div = document.createElement("div")
-    div.innerText = i
-    document.querySelector('.wrapper').appendChild(div)
+  for (var i = 0; i < 200; i++) {
+    var li = document.createElement("li")
+    li.innerText = i
+    document.querySelector('.list').appendChild(li)
   }
   new BScroll(document.querySelector('.wrapper'))
 </script>

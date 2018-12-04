@@ -1,7 +1,7 @@
 'use strict'
 
 function BScroll(ctx) {
-  var el = ctx
+  var el = ctx.firstElementChild || ctx.firstChild
   var OFFSET = 50
   var vy = 0
   var F = 150
@@ -9,11 +9,11 @@ function BScroll(ctx) {
   var isTransform = false
   var cur = 0
   var target = 0
-
+  var requestId
 
   ctx.addEventListener('touchstart', function (e) {
     if (isTransform) return
-    clearTimeout(this._timer)
+    window.cancelAnimationFrame(requestId)
     vy = 0
 
     this._oy = e.changedTouches[0].clientY - cur
@@ -48,15 +48,15 @@ function BScroll(ctx) {
   ctx.addEventListener('touchend', function () {
     if (isDown) {
       isDown = false
-      var f = ((vy >> 31) * 2 + 1) * 0.5
+      var friction = ((vy >> 31) * 2 + 1) * 0.5
       var oh = this.scrollHeight - this.clientHeight
+
       var bounce = function () {
-        vy -= f
+        vy -= friction
         cur += vy
+        requestId = window.requestAnimationFrame(bounce)
 
         transform(cur)
-
-        var requestId = window.requestAnimationFrame(bounce)
         if (-cur - oh > OFFSET) {
           target = -oh
           window.cancelAnimationFrame(requestId)
@@ -71,19 +71,20 @@ function BScroll(ctx) {
         }
 
         if (Math.abs(vy) < 1) {
+          window.cancelAnimationFrame(requestId)
 
           if (cur > 0) {
-            window.cancelAnimationFrame(requestId)
             ease()
             return
           }
           if (-cur > oh) {
             target = -oh
-            window.cancelAnimationFrame(requestId)
             ease()
+            return
           }
         }
       }
+
       bounce()
     }
   })
@@ -98,12 +99,11 @@ function BScroll(ctx) {
       window.cancelAnimationFrame(requestId)
       isTransform = false
     }
-
     transform(cur)
   }
 
   function transform(y) {
-    el.style.transform = 'translate3d(0,' + y + 'px,0)'
+    el.style.transform = 'translateY(' + y + 'px) translateZ(0)'
   }
 }
 
