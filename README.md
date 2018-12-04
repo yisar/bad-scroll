@@ -9,7 +9,7 @@ yarn add bad-scroll
 dom:
 ```html
 <div class=wrapper>
-    <ul class=list>
+    <ul class=content>
         ···
     </ul>
 </div>
@@ -21,5 +21,6 @@ import BScroll from 'bad-scroll'
 
 const BScroll = new BScroll(document.querySelector('.wrapper'))
 ```
+#### sketch
 
-
+<img src="https://ws1.sinaimg.cn/large/0065Zy9egy1fxv217rjmij30n20hkjrx.jpg" alt="logo" width="200px"/>
